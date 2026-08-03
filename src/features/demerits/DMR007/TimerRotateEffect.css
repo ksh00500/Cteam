@@ -1,0 +1,24 @@
+/* src/features/demerits/DMR007/TimerRotateEffect.css */
+
+.dmr-007-rotate-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: transform 0.3s ease;
+}
+
+/* 난이도 '하' (기본 속도) */
+.dmr-007-rotating-normal {
+  animation: dmr-007-spin 2.5s linear infinite;
+}
+
+/* 난이도 '상' (매우 빠른 속도) */
+.dmr-007-rotating-fast {
+  animation: dmr-007-spin 0.5s linear infinite;
+}
+
+@keyframes dmr-007-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

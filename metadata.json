@@ -1,0 +1,6 @@
+{
+  "name": "본때 C팀 게임",
+  "description": "본때 C팀의 학교 축제 부스용 타이머 맞추기 게임 SetStop",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

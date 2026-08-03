@@ -1,0 +1,78 @@
+/* Container for the overlays */
+.setstop-overlays-container {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100dvh;
+  pointer-events: none;
+  z-index: 10000;
+  overflow: hidden;
+}
+
+/* Base style for a single caption bubble */
+.dmr-004-caption {
+  position: absolute;
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+  font-family: 'Arial Black', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-weight: 900;
+  border: 3px solid #000000;
+  box-shadow: 4px 4px 0px #000000;
+  border-radius: 9999px; /* Pill/Cloud shape */
+  padding: 6px 14px;
+  font-size: clamp(1rem, 1.8vw, 1.35rem);
+  color: #000000;
+  will-change: transform;
+  animation: dmr004-scroll-left linear forwards;
+}
+
+/* Different color variations for neo-brutalist pop */
+.dmr-004-color-1 { background-color: #FACC15; } /* Yellow */
+.dmr-004-color-2 { background-color: #38bdf8; } /* Blue */
+.dmr-004-color-3 { background-color: #4ade80; } /* Green */
+.dmr-004-color-4 { background-color: #f472b6; } /* Pink */
+.dmr-004-color-5 { background-color: #fb923c; } /* Orange */
+.dmr-004-color-6 { background-color: #c084fc; } /* Purple */
+.dmr-004-color-7 { background-color: #ffffff; } /* White */
+
+/* Art style (ASCII/Braille) */
+.dmr-004-caption-art {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 6px;
+  line-height: 1.0;
+  border-radius: 12px;
+  padding: 8px 12px;
+  background-color: #ffffff;
+  box-shadow: 5px 5px 0px #000000;
+  white-space: pre;
+}
+
+/* Fake timer style */
+.dmr-004-caption-fake-timer {
+  border-color: #ff3b30;
+  box-shadow: 4px 4px 0px #ff3b30;
+  background-color: #fee2e2;
+  color: #ef4444;
+}
+
+.dmr-004-timer-icon {
+  margin-right: 4px;
+  animation: dmr004-pulse 0.5s infinite alternate;
+}
+
+@keyframes dmr004-scroll-left {
+  0% {
+    transform: translateX(0);
+    left: 100%;
+  }
+  100% {
+    transform: translateX(-100%);
+    left: 0;
+  }
+}
+
+@keyframes dmr004-pulse {
+  0% { opacity: 0.5; }
+  100% { opacity: 1; }
+}

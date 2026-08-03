@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 160" width="420" height="160" shape-rendering="crispEdges">
+  <style>
+    .pixel-text { font-family: monospace, 'Courier New', sans-serif; font-weight: 900; fill: #0d0d18; font-size: 52px; letter-spacing: -2px; }
+  </style>
+  <rect width="100%" height="100%" fill="transparent" />
+  
+  <!-- Pixel Clock Icon -->
+  <g transform="translate(20, 10)">
+    <!-- Outer Ring -->
+    <rect x="40" y="10" width="60" height="10" fill="#0d0d18"/>
+    <rect x="25" y="20" width="20" height="10" fill="#0d0d18"/>
+    <rect x="95" y="20" width="20" height="10" fill="#0d0d18"/>
+    <rect x="15" y="30" width="15" height="15" fill="#0d0d18"/>
+    <rect x="110" y="30" width="15" height="15" fill="#0d0d18"/>
+    <rect x="10" y="45" width="10" height="50" fill="#0d0d18"/>
+    <rect x="120" y="45" width="10" height="50" fill="#0d0d18"/>
+    <rect x="15" y="95" width="15" height="15" fill="#0d0d18"/>
+    <rect x="110" y="95" width="15" height="15" fill="#0d0d18"/>
+    <rect x="25" y="110" width="20" height="10" fill="#0d0d18"/>
+    <rect x="95" y="110" width="20" height="10" fill="#0d0d18"/>
+    <rect x="40" y="120" width="60" height="10" fill="#0d0d18"/>
+    
+    <!-- Clock Center Pivot -->
+    <rect x="63" y="63" width="14" height="14" rx="2" fill="#0d0d18"/>
+    <rect x="66" y="66" width="8" height="8" fill="#ffffff"/>
+    
+    <!-- Minute Hand (pointing up to 12) -->
+    <rect x="65" y="30" width="10" height="35" fill="#0d0d18"/>
+    
+    <!-- Hour Hand (pointing left to ~9) -->
+    <rect x="35" y="63" width="30" height="10" fill="#0d0d18"/>
+    <rect x="30" y="58" width="10" height="10" fill="#0d0d18"/>
+  </g>
+
+  <!-- Pixel Text: Set Stop! -->
+  <text x="175" y="95" class="pixel-text">Set Stop!</text>
+</svg>

@@ -1,0 +1,31 @@
+/* src/features/demerits/DMR009/ScreenInversionEffect.css */
+
+.dmr-009-container {
+  width: 100%;
+  height: 100%;
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transform-origin: center center;
+}
+
+/* 난이도 '중': 좌우 반전 (가로 반전) */
+.dmr-009-flip-horizontal {
+  transform: scaleX(-1);
+}
+
+/* 난이도 '상': 상하 반전 (세로 반전) */
+.dmr-009-flip-vertical {
+  transform: scaleY(-1);
+}
+
+/* 실제 게임에서는 루트 전체와 body 포털을 함께 반전합니다. */
+body.setstop-screen-flip-horizontal #root,
+body.setstop-screen-flip-horizontal .dmr-008-popup-layer {
+  transform: scaleX(-1);
+  transform-origin: center center;
+}
+
+body.setstop-screen-flip-vertical #root,
+body.setstop-screen-flip-vertical .dmr-008-popup-layer {
+  transform: scaleY(-1);
+  transform-origin: center center;
+}

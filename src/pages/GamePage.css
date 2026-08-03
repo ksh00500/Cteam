@@ -1,0 +1,333 @@
+/* 게임 화면은 기존 네오 브루탈리즘 스타일을 유지하되 전체 뷰포트를 사용합니다. */
+.setstop-container.game-page-container {
+  width: 100vw;
+  max-width: none;
+  min-height: 100dvh;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background: var(--color-bg-main);
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.game-arena {
+  width: 100%;
+  min-height: 100dvh;
+  position: relative;
+  display: grid;
+  grid-template-rows: 1fr;
+  overflow: hidden;
+  color: #000000;
+  background:
+    radial-gradient(circle at 50% 45%, #ffffff 0%, #f8fafc 34%, transparent 68%),
+    var(--color-bg-main);
+}
+
+.game-hud {
+  width: 100%;
+  position: absolute;
+  inset: 0 0 auto;
+  z-index: 200;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: clamp(0.75rem, 1.8vw, 1.5rem) clamp(0.75rem, 2.25vw, 2.25rem);
+  pointer-events: none;
+}
+
+.game-hud-left,
+.game-hud-right {
+  min-width: 0;
+  pointer-events: auto;
+}
+
+.game-hud-right {
+  max-width: min(52vw, 650px);
+  display: flex;
+  justify-content: flex-end;
+}
+
+.game-stage-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.48rem;
+  padding: 0.5rem 1rem;
+  color: #ffffff;
+  background: #000000;
+  border: 2px solid #000000;
+  border-radius: 9px;
+  box-shadow: 3px 3px 0 #ff3b30;
+  font-size: clamp(0.8rem, 1.2vw, 1rem);
+  font-weight: 900;
+  letter-spacing: 0.08em;
+}
+
+.game-stage-indicator strong {
+  color: #ff3b30;
+  font-size: clamp(1.25rem, 2.1vw, 1.75rem);
+  line-height: 0.8;
+}
+
+.game-stage-divider {
+  opacity: 0.55;
+}
+
+.active-demerits {
+  width: 100%;
+  padding: 0.9rem;
+  margin-bottom: 1rem;
+  color: #000000;
+  background: #fef08a;
+  border: 3px solid #000000;
+  border-radius: var(--radius-md);
+  box-shadow: 4px 4px 0 #000000;
+}
+
+.active-demerits-title {
+  margin-bottom: 0.55rem;
+  color: #000000;
+  font-size: 1rem;
+  font-weight: 900;
+}
+
+.active-demerits-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.active-demerit-chip {
+  padding: 0.38rem 0.7rem;
+  color: #ffffff;
+  background: #000000;
+  border: 2px solid #000000;
+  border-radius: 6px;
+  box-shadow: 2px 2px 0 #ff3b30;
+  font-size: 0.9rem;
+  font-weight: 900;
+}
+
+.active-demerits-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  color: #6b7280;
+  background: #f3f4f6;
+}
+
+.active-demerits-hud {
+  width: auto;
+  max-width: 100%;
+  margin: 0;
+  padding: 0.5rem 0.65rem;
+  text-align: right;
+}
+
+.active-demerits-hud .active-demerits-title {
+  margin-bottom: 0.4rem;
+  font-size: 0.75rem;
+}
+
+.active-demerits-hud .active-demerits-chips {
+  justify-content: flex-end;
+}
+
+.active-demerits-hud .active-demerit-chip {
+  padding: 0.28rem 0.52rem;
+  font-size: 0.72rem;
+}
+
+.game-playfield {
+  width: 100%;
+  min-height: 100dvh;
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(5.5rem, 12vh, 7rem) clamp(0.75rem, 3vw, 3rem) clamp(1rem, 3vh, 2.25rem);
+}
+
+.game-target-time {
+  position: relative;
+  z-index: 20;
+  margin-bottom: clamp(0.7rem, 1.8vh, 1.2rem);
+  text-align: center;
+}
+
+.game-target-time > span {
+  display: block;
+  margin-bottom: 0.25rem;
+  color: #4b5563;
+  font-size: clamp(0.82rem, 1.35vw, 1.05rem);
+  font-weight: 900;
+  letter-spacing: 0.08em;
+}
+
+.game-target-time > strong {
+  display: block;
+  color: #000000;
+  font-family: var(--font-family-timer);
+  font-size: clamp(2.3rem, 4.5vw, 3.9rem);
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.05em;
+}
+
+.game-target-time small {
+  font-family: var(--font-family-body);
+  font-size: 0.3em;
+  letter-spacing: 0;
+}
+
+.game-interaction-layer {
+  width: min(100%, 675px);
+  position: relative;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(1rem, 2.2vh, 1.5rem);
+}
+
+.game-timer-zone {
+  width: 100%;
+  min-height: 0;
+  position: relative;
+  display: grid;
+  place-items: center;
+}
+
+.game-timer-display {
+  width: min(100%, 540px);
+  margin: 0 auto;
+  padding: clamp(0.95rem, 2.25vw, 1.5rem);
+  color: #000000;
+  text-align: center;
+  background: #ffffff;
+  border: 3px solid #000000;
+  border-radius: var(--radius-lg);
+  box-shadow: 5px 5px 0 #000000;
+}
+
+.game-timer-status {
+  margin-bottom: 0.25rem;
+  color: #6b7280;
+  font-size: clamp(0.78rem, 1.12vw, 0.92rem);
+  font-weight: 900;
+  letter-spacing: 0.12em;
+}
+
+.game-timer-digits {
+  color: #000000;
+  font-family: var(--font-family-timer);
+  font-size: clamp(3.6rem, 8.25vw, 6.75rem);
+  font-weight: 900;
+  line-height: 0.95;
+  letter-spacing: -0.08em;
+  font-variant-numeric: tabular-nums;
+}
+
+.game-timer-display.is-running .game-timer-digits {
+  color: #ff3b30;
+}
+
+.game-controls {
+  width: min(100%, 510px);
+  min-height: 0;
+  position: relative;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  margin-top: 0;
+}
+
+.game-controls .setstop-btn {
+  width: 100%;
+  min-height: 60px;
+  font-size: clamp(1.05rem, 1.9vw, 1.4rem);
+}
+
+.game-stop-button {
+  min-height: 64px !important;
+  font-size: clamp(1.1rem, 2.1vw, 1.5rem) !important;
+}
+
+/* Overlay 계열 디메리트는 항상 타이머와 HUD보다 위에 표시합니다. */
+.setstop-overlays-container {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  width: 100vw;
+  height: 100dvh;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+@media (max-width: 700px) {
+  .game-hud {
+    gap: 0.75rem;
+    padding: 0.8rem;
+  }
+
+  .game-hud-right {
+    max-width: 56vw;
+  }
+
+  .game-stage-indicator {
+    gap: 0.4rem;
+    padding: 0.55rem 0.75rem;
+    font-size: 0.82rem;
+  }
+
+  .active-demerits-hud {
+    padding: 0.5rem 0.6rem;
+  }
+
+  .active-demerits-hud .active-demerits-title {
+    font-size: 0.76rem;
+  }
+
+  .active-demerit-chip {
+    max-width: 150px;
+    overflow: hidden;
+    padding: 0.3rem 0.5rem;
+    font-size: 0.72rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .game-playfield {
+    padding: 7.2rem 0.8rem 1.2rem;
+  }
+
+  .game-interaction-layer {
+    width: min(94vw, 675px);
+  }
+
+  .game-controls {
+    width: min(88vw, 510px);
+  }
+}
+
+@media (max-height: 700px) and (min-width: 701px) {
+  .game-playfield {
+    padding-top: 6rem;
+    padding-bottom: 1rem;
+  }
+
+  .game-target-time {
+    margin-bottom: 0.5rem;
+  }
+
+  .game-controls {
+    min-height: 0;
+    margin-top: 0;
+  }
+}

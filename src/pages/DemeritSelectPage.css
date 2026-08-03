@@ -1,0 +1,334 @@
+.demerit-select-container {
+  --tier-color: #45d49a;
+  --tier-color-soft: rgba(69, 212, 154, 0.2);
+  width: min(900px, calc(100vw - 2rem));
+  max-width: 900px;
+  min-height: min(620px, calc(100dvh - 2rem));
+  padding: 1.75rem 2rem 1.35rem;
+  overflow: hidden;
+  color: #f8fafc;
+  border-color: #334155;
+  background:
+    radial-gradient(circle at 50% -10%, var(--tier-color-soft), transparent 45%),
+    linear-gradient(145deg, #111827 0%, #07101f 52%, #020617 100%);
+  box-shadow: 0 28px 80px rgba(2, 6, 23, 0.35), 8px 8px 0 #111827;
+}
+
+.tier-screen-mid {
+  --tier-color: #f2b84b;
+  --tier-color-soft: rgba(242, 184, 75, 0.22);
+}
+
+.tier-screen-high {
+  --tier-color: #ef5d7a;
+  --tier-color-soft: rgba(239, 93, 122, 0.23);
+}
+
+.demerit-selection-progress {
+  width: min(320px, 80%);
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.demerit-progress-step {
+  width: 30px;
+  height: 30px;
+  flex: 0 0 30px;
+  display: grid;
+  place-items: center;
+  color: #8290a7;
+  background: #111827;
+  border: 2px solid #3a4659;
+  border-radius: 50%;
+  font-size: 0.78rem;
+  font-weight: 900;
+}
+
+.demerit-progress-step.is-active,
+.demerit-progress-step.is-complete {
+  color: #07101f;
+  background: var(--tier-color);
+  border-color: #f8fafc;
+  box-shadow: 0 0 18px var(--tier-color-soft);
+}
+
+.demerit-progress-line {
+  height: 2px;
+  flex: 1;
+  background: #3a4659;
+}
+
+.demerit-progress-line.is-complete {
+  background: var(--tier-color);
+}
+
+.demerit-select-heading {
+  text-align: center;
+  margin-bottom: 1.15rem;
+}
+
+.demerit-select-eyebrow {
+  color: #8fa3bd;
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.25em;
+}
+
+.demerit-select-heading h2 {
+  margin: 0.35rem 0 0.7rem;
+  color: #f8fafc;
+  font-family: var(--font-family-main);
+  font-size: clamp(1.8rem, 3.2vw, 2.45rem);
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+}
+
+.demerit-tier-banner {
+  display: inline-flex;
+  align-items: center;
+  overflow: hidden;
+  margin-bottom: 0.8rem;
+  color: #07101f;
+  background: var(--tier-color);
+  border: 2px solid #f8fafc;
+  border-radius: 999px;
+  box-shadow: 0 0 24px var(--tier-color-soft);
+}
+
+.demerit-tier-banner span {
+  padding: 0.34rem 0.7rem;
+  font-size: 0.7rem;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+  border-right: 2px solid rgba(7, 16, 31, 0.35);
+}
+
+.demerit-tier-banner strong {
+  padding: 0.34rem 0.85rem;
+  font-size: 0.85rem;
+  font-weight: 900;
+}
+
+.demerit-select-heading p {
+  margin: 0;
+  color: #aebbcf;
+  font-size: clamp(0.88rem, 1.25vw, 0.98rem);
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+.demerit-active-summary {
+  width: 100%;
+  max-width: 760px;
+}
+
+.demerit-active-summary > div {
+  margin-bottom: 1.1rem !important;
+  background: rgba(254, 240, 138, 0.95) !important;
+}
+
+.demerit-augment-grid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(1rem, 2.5vw, 2rem);
+  align-items: stretch;
+  perspective: 1000px;
+}
+
+.demerit-augment-card {
+  --card-accent: #45d49a;
+  --card-accent-soft: rgba(69, 212, 154, 0.22);
+  min-width: 0;
+  min-height: 300px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1.15rem 1.25rem 1.25rem;
+  overflow: hidden;
+  color: #ecf4ff;
+  text-align: center;
+  background:
+    radial-gradient(circle at 50% 28%, var(--card-accent-soft), transparent 36%),
+    linear-gradient(155deg, #162238 0%, #0a1324 62%, #050b16 100%);
+  border: 2px solid #64748b;
+  border-radius: 18px;
+  box-shadow: 0 14px 35px rgba(0, 0, 0, 0.38), inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+  cursor: pointer;
+  transition: transform 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
+}
+
+.demerit-augment-card.tier-mid {
+  --card-accent: #f2b84b;
+  --card-accent-soft: rgba(242, 184, 75, 0.22);
+}
+
+.demerit-augment-card.tier-high {
+  --card-accent: #ef5d7a;
+  --card-accent-soft: rgba(239, 93, 122, 0.24);
+}
+
+.demerit-augment-card:hover:not(:disabled),
+.demerit-augment-card:focus-visible:not(:disabled) {
+  z-index: 2;
+  outline: none;
+  transform: translateY(-8px) scale(1.015);
+  border-color: var(--card-accent);
+  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.48), 0 0 26px var(--card-accent-soft);
+}
+
+.demerit-augment-card:active:not(:disabled) {
+  transform: translateY(-2px) scale(0.995);
+}
+
+.demerit-augment-card:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.demerit-card-frame {
+  position: absolute;
+  inset: 8px;
+  pointer-events: none;
+  border: 1px solid color-mix(in srgb, var(--card-accent) 45%, transparent);
+  border-radius: 12px;
+}
+
+.demerit-card-topline {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  color: #8fa3bd;
+  font-size: 0.64rem;
+  font-weight: 900;
+  letter-spacing: 0.13em;
+}
+
+.demerit-card-id {
+  color: var(--card-accent);
+}
+
+.demerit-card-emblem {
+  width: 72px;
+  height: 72px;
+  display: grid;
+  place-items: center;
+  margin: 1rem 0 0.65rem;
+  color: var(--card-accent);
+  background: rgba(2, 6, 23, 0.72);
+  border: 2px solid var(--card-accent);
+  transform: rotate(45deg);
+  box-shadow: 0 0 24px var(--card-accent-soft);
+}
+
+.demerit-card-emblem > span {
+  display: block;
+  max-width: 62px;
+  font-size: 0.75rem;
+  letter-spacing: -0.03em;
+  transform: rotate(-45deg);
+}
+
+.demerit-card-tier {
+  color: var(--card-accent);
+  font-size: 0.7rem;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+}
+
+.demerit-card-name {
+  display: block;
+  margin: 0.35rem 0 0.55rem;
+  color: #ffffff;
+  font-family: var(--font-family-main);
+  font-size: clamp(1.15rem, 2vw, 1.5rem);
+  line-height: 1.2;
+}
+
+.demerit-card-description {
+  display: block;
+  flex: 1;
+  color: #b9c6d8;
+  font-size: clamp(0.86rem, 1.2vw, 0.95rem);
+  font-weight: 700;
+  line-height: 1.48;
+}
+
+.demerit-card-conflict {
+  margin-top: 0.5rem;
+  color: #fca5a5;
+  font-size: 0.75rem;
+  font-weight: 900;
+}
+
+.demerit-card-select {
+  width: calc(100% - 1.1rem);
+  display: flex;
+  justify-content: center;
+  gap: 0.7rem;
+  margin-top: 1rem;
+  padding: 0.62rem 0.8rem;
+  color: #07101f;
+  background: var(--card-accent);
+  border-radius: 6px;
+  font-size: 0.82rem;
+  font-weight: 900;
+  letter-spacing: 0.03em;
+}
+
+.demerit-empty-options {
+  width: 100%;
+  padding: 2rem;
+  color: #fecaca;
+  text-align: center;
+  border: 2px dashed #ef4444;
+  border-radius: 14px;
+}
+
+.demerit-select-hint {
+  margin: 1.15rem 0 0;
+  color: #77869d;
+  font-size: 0.76rem;
+  font-weight: 800;
+}
+
+@media (max-width: 640px) {
+  .demerit-select-container {
+    width: calc(100vw - 1rem);
+    padding: 1.5rem 1rem 1.25rem;
+  }
+
+  .demerit-augment-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .demerit-augment-card {
+    min-height: 330px;
+  }
+}
+
+@media (max-height: 760px) and (min-width: 641px) {
+  .demerit-select-container {
+    min-height: 0;
+    padding-top: 1.25rem;
+    padding-bottom: 1.25rem;
+  }
+
+  .demerit-selection-progress,
+  .demerit-select-heading {
+    margin-bottom: 0.8rem;
+  }
+
+  .demerit-card-emblem {
+    width: 68px;
+    height: 68px;
+    margin-block: 0.75rem 0.5rem;
+  }
+
+  .demerit-augment-card {
+    min-height: 300px;
+  }
+}

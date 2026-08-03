@@ -1,0 +1,44 @@
+:root {
+  /* Primary Neo Brutalist Palette */
+  --color-bg-main: #F2F2F2;
+  --color-bg-card: #FFFFFF;
+  --color-primary: #FF3B30;
+  --color-primary-hover: #E02E24;
+  --color-primary-active: #C42118;
+  --color-accent: #000000;
+  
+  --color-success: #16A34A;
+  --color-success-hover: #15803D;
+  --color-danger: #FF3B30;
+  --color-danger-hover: #E02E24;
+  --color-warning: #FACC15;
+  
+  --color-text-main: #000000;
+  --color-text-sub: #374151;
+  --color-text-muted: #6B7280;
+  
+  --color-border: #000000;
+  --color-border-dark: #000000;
+  
+  /* Fonts */
+  --font-family-main: 'Arial Black', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-family-body: 'Arial', sans-serif;
+  --font-family-timer: 'Courier New', Courier, monospace;
+  --font-family-pixel: 'Courier New', Courier, monospace;
+  
+  /* Neo Brutalist Shadows */
+  --shadow-sm: 3px 3px 0px #000000;
+  --shadow-md: 5px 5px 0px #000000;
+  --shadow-lg: 8px 8px 0px #000000;
+  --shadow-button: 5px 5px 0px #000000;
+
+  /* Border Radius */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-full: 9999px;
+  
+  /* Layout Dimensions */
+  --header-height: 60px;
+  --max-content-width: 540px;
+}

@@ -1,0 +1,83 @@
+/* src/features/demerits/DMR002/StopButtonFloatingEffect.css */
+
+.dmr-002-wrapper {
+  display: inline-block;
+  position: relative;
+  /* 이동 중 버튼이 다른 요소를 가리거나 뒤에 묻히지 않도록 z-index 부여 */
+  z-index: 50;
+  transition: transform 0.5s ease-out;
+}
+
+/* 난이도 '하': 10초 동안 화면 전체를 천천히 순회 */
+.dmr-002-floating-low {
+  animation: dmr-002-float-screen-low 10s ease-in-out infinite alternate;
+}
+
+/* 난이도 '중': 같은 경로를 조금 더 빠르게 순회 */
+.dmr-002-floating-medium {
+  animation: dmr-002-float-screen-medium 7s ease-in-out infinite alternate;
+}
+
+/* 난이도 '상': 빠르게 움직이면서 버튼 크기도 계속 변함 */
+.dmr-002-floating-hard {
+  animation: dmr-002-float-screen-hard 5s ease-in-out infinite alternate;
+}
+
+@keyframes dmr-002-float-screen-low {
+  0% {
+    transform: translate(0, 0);
+  }
+  
+  33% {
+    transform: translate(-32vw, -25vh); /* 좌측 상단 */
+  }
+  
+  66% {
+    transform: translate(30vw, 25vh); /* 우측 하단 */
+  }
+  100% {
+    transform: translate(-10vw, -35vh); /* 상단 중앙 부근 */
+  }
+}
+
+@keyframes dmr-002-float-screen-medium {
+  0% {
+    transform: translate(0, 0);
+  }
+  20% {
+    transform: translate(-35vw, 32vh);
+  }
+  40% {
+    transform: translate(35vw, -30vh);
+  }
+  60% {
+    transform: translate(-32vw, -32vh);
+  }
+  80% {
+    transform: translate(32vw, 30vh);
+  }
+  100% {
+    transform: translate(0, -35vh);
+  }
+}
+
+@keyframes dmr-002-float-screen-hard {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  20% {
+    transform: translate(-35vw, 32vh) scale(0.72);
+  }
+  40% {
+    transform: translate(35vw, -30vh) scale(1.28);
+  }
+  60% {
+    transform: translate(-32vw, -32vh) scale(0.82);
+  }
+  80% {
+    transform: translate(32vw, 30vh) scale(1.18);
+  }
+  100% {
+    transform: translate(0, -35vh) scale(0.7);
+  }
+}

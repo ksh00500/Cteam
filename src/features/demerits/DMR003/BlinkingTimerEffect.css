@@ -1,0 +1,27 @@
+/* src/features/demerits/DMR003/BlinkingTimerEffect.css */
+
+.dmr-003-blinking-container {
+  width: 100%;
+}
+
+/* 난이도 '하': 0.2초 주기 (0.1초 보임 / 0.1초 사라짐) */
+.dmr-003-blinking-normal {
+  animation: dmr-003-blink 0.2s steps(1, end) infinite;
+}
+
+/* 난이도 '상': 0.1초 주기 (0.05초 보임 / 0.05초 사라짐) */
+.dmr-003-blinking-fast {
+  animation: dmr-003-blink 0.1s steps(1, end) infinite;
+}
+
+@keyframes dmr-003-blink {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
