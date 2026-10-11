@@ -1,34 +1,29 @@
 import React from "react";
 import "./TimerHideEffect.css";
 
-export default function TimerHideEffect({
-  elapsedTime,
-  isRunning,
-  roundId,
-  children
-}) {
-  // 2.5초까지 표시하고 3초까지 서서히 숨깁니다.
-  const getOpacity = (time) => {
-    if (time < 2.5) return 1;
-    if (time < 3) return 1 - (time - 2.5) / 0.5;
-    return 0;
-  };
-
-  if (elapsedTime >= 3) {
-    return (
-      <div style={{ textAlign: "center", padding: "1rem 0" }}>
-        <div className="dmr-001-hidden-badge">
-          🙈 타이머 숨김 (3초 경과)
-        </div>
-      </div>
-    );
-  }
-
-  const opacity = getOpacity(elapsedTime);
+export default function TimerHideEffect({ elapsedTime, isRunning, children }) {
+  // 타이머를 숨기더라도 원래 영역은 유지해 버튼 위치가 변하지 않도록 합니다.
+  const opacity = !isRunning || elapsedTime < 2.5
+    ? 1
+    : elapsedTime < 3
+      ? 1 - (elapsedTime - 2.5) / 0.5
+      : 0;
+  const isHidden = isRunning && elapsedTime >= 3;
 
   return (
-    <div style={{ opacity, transition: "opacity 0.1s linear" }}>
-      {children}
+    <div className="dmr-001-wrapper">
+      <div
+        className="dmr-001-content"
+        style={{ opacity, transition: "opacity 0.1s linear" }}
+        aria-hidden={isHidden}
+      >
+        {children}
+      </div>
+      {isHidden && (
+        <div className="dmr-001-hidden-overlay">
+          <div className="dmr-001-hidden-badge">🙈 타이머 숨김 (3초 경과)</div>
+        </div>
+      )}
     </div>
   );
 }

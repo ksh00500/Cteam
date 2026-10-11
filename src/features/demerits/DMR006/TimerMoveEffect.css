@@ -1,3 +1,34 @@
-.timer-move-effect {
-  /* optional base class, not required as inline styles are used */
+/* 움직이는 타이머가 fixed로 전환되어도 원래 타이머 자리를 유지합니다. */
+.dmr-006-slot {
+  width: 100%;
+  min-height: var(--game-timer-zone-height, 160px);
+  display: grid;
+  place-items: center;
+}
+
+.dmr-006-moving {
+  width: min(100%, 540px);
+}
+
+.dmr-006-moving.is-running {
+  --dmr-006-width: min(540px, 88vw);
+  position: fixed;
+  z-index: 45;
+  width: var(--dmr-006-width);
+  top: clamp(
+    calc(var(--game-timer-zone-height, 160px) / 2 + 10px),
+    var(--dmr-006-top),
+    calc(100dvh - var(--game-timer-zone-height, 160px) / 2 - 10px)
+  );
+  left: clamp(
+    calc(var(--dmr-006-width) / 2 + 10px),
+    var(--dmr-006-left),
+    calc(100vw - var(--dmr-006-width) / 2 - 10px)
+  );
+  transform: translate(-50%, -50%) rotate(var(--dmr-006-rotation));
+  transition:
+    top var(--dmr-006-duration) ease,
+    left var(--dmr-006-duration) ease,
+    transform var(--dmr-006-duration) ease;
+  pointer-events: none;
 }

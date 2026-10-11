@@ -1,7 +1,8 @@
 /* src/features/demerits/DMR002/StopButtonFloatingEffect.css */
 
 .dmr-002-wrapper {
-  display: inline-block;
+  display: block;
+  width: 100%;
   position: relative;
   /* 이동 중 버튼이 다른 요소를 가리거나 뒤에 묻히지 않도록 z-index 부여 */
   z-index: 50;
@@ -18,7 +19,7 @@
   animation: dmr-002-float-screen-medium 7s ease-in-out infinite alternate;
 }
 
-/* 난이도 '상': 빠르게 움직이면서 버튼 크기도 계속 변함 */
+/* 난이도 '상': 버튼의 크기는 유지하고 속도와 경로만 강화 */
 .dmr-002-floating-hard {
   animation: dmr-002-float-screen-hard 5s ease-in-out infinite alternate;
 }
@@ -63,21 +64,21 @@
 
 @keyframes dmr-002-float-screen-hard {
   0% {
-    transform: translate(0, 0) scale(1);
+    transform: translate(0, 0);
   }
   20% {
-    transform: translate(-35vw, 32vh) scale(0.72);
+    transform: translate(-35vw, 32vh);
   }
   40% {
-    transform: translate(35vw, -30vh) scale(1.28);
+    transform: translate(35vw, -30vh);
   }
   60% {
-    transform: translate(-32vw, -32vh) scale(0.82);
+    transform: translate(-32vw, -32vh);
   }
   80% {
-    transform: translate(32vw, 30vh) scale(1.18);
+    transform: translate(32vw, 30vh);
   }
   100% {
-    transform: translate(0, -35vh) scale(0.7);
+    transform: translate(0, -35vh);
   }
 }
