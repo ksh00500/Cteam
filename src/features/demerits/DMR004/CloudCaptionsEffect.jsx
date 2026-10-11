@@ -1,8 +1,29 @@
 import React, { useEffect, useState, useRef } from "react";
 import "./CloudCaptionsEffect.css";
 
-// 의미 없는 반응/특수문자는 유지하고, 영상 댓글형 밈 대신 축제 게임에 맞는 문구를 사용합니다.
-const TEXT_TEMPLATES = [
+// 축제 응원 문구는 단순히 배열에 추가하지 않고 확률을 따로 관리합니다.
+// 전체 자막: 그림 8%, 연성대 응원 55.2%(92% * 60%), 기타 텍스트 36.8%.
+const ART_CAPTION_PROBABILITY = 0.08;
+const SCHOOL_CAPTION_PROBABILITY = 0.60; // 텍스트로 결정된 경우의 60%
+
+const SCHOOL_TEXT_TEMPLATES = [
+  "연성대 화이팅!",
+  "연성대 최고!",
+  "연성대 축제 즐기자!",
+  "연성대 10초 장인은 누구?",
+  "연성대 축제 왔다!",
+  "연성대 축제 1등 가자!",
+  "연성대 축제 텐션 UP!",
+  "연성대 축제 대박!",
+  "연성대 축제 즐기는 중!",
+  "연성대 축제의 주인공은?",
+  "연성대 타이머 고수 등장!",
+  "연성대 부스 도전 중!",
+  "연성대 축제 제대로 즐기자!",
+  "연성대 기록 갱신 도전!"
+];
+
+const OTHER_TEXT_TEMPLATES = [
   "ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ",
   "와아아아아아아아아아아아아아아아아아아",
   "??????????????????????????????????????????????",
@@ -12,10 +33,6 @@ const TEXT_TEMPLATES = [
   "손 떨리면 안 돼!",
   "기록 갱신 가자!",
   "오늘의 1등은 누구?",
-  "연성대 화이팅!",
-  "연성대 최고!",
-  "연성대 축제 즐기자!",
-  "연성대 10초 장인은 누구?",
   "정지 버튼 어디 갔지?",
   "집중! 집중!",
   "（⌐■_■）",
@@ -42,32 +59,7 @@ const BRAILLE_ART_1 = `⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠁⠠⡀⠀⠉⡇⠀⠀⠀⠀⠀⠀⠀⡀⠄⠃⠀⢀⠀⠊⠀⠀⠀⠈
 ⠀⠀⠀⠀⠀⠀⠀⠀⠈⢉⡸⠀⠀⠀⡇⠐⠒⠒⠛⠂⢴⠒⠀⠁⠀⠀⠀⠀⠀⠀`;
 
-const BRAILLE_ART_2 = `⠀⠀⠀⠀⢠⠁⠉⠉⠉⣍⣉⢻⠿⣿⣷⡶⣶⠶⠛⠋⠉⠁⣀⡀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⣴⡿⣠⣠⠴⢻⡟⡿⣿⣶⣀⣻⣧⡀⠀⣀⣦⣢⣿⣟⠃⠀⠀⠀⠀⠀⠀
-⠀⠀⢐⠀⠀⠈⠑⠀⠾⠯⠿⢿⣿⣿⠏⠛⠤⠲⠉⢁⣿⣿⣿⡿⠀⠀⠀⠀⠀⠀
-⠀⠀⠁⠀⠀⠀⠀⠀⠲⢦⡠⠴⠶⡗⠶⣢⣀⣀⣠⣡⣶⢤⡤⡤⠀⠀⠀⠀⠀⠀
-⠀⢀⠀⠀⠀⠀⠀⠀⠀⢠⣡⣦⠿⠾⠟⠻⠛⠛⠛⠛⢳⣶⡔⡁⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⣴⣿⣥⢴⢤⣤⣤⣤⣤⣤⣤⣶⣾⣿⣿⠁⠀⠀⢈⠀⠀⠀
-⢀⣴⣾⣶⣦⣴⣤⣾⣿⣿⣄⢀⣿⣿⣿⣿⣿⣿⣿⣛⠻⣿⡏⣤⣾⣦⠄⠀⠀⠀
-⣿⣿⣿⣿⣿⣿⣿⣿⣿⢿⠋⠉⠉⠉⠉⠉⠉⠉⠉⠉⢀⡝⣱⣿⡿⠋⠀⠀⠀⠀`;
-
-const BRAILLE_ART_3 = `⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⡤⠀⠠⠄⠠⢀⡠⠄⠠⠠⣀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⢀⡀⠀⠠⠔⠖⠒⠒⠒⣤⢤⠤⠀⠠⡗⡀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⡐⠁⠀⢀⣠⢀⠀⣀⣀⠠⣄⣂⠀⠀⠀⢀⠀⡠⡀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⡐⠀⢀⠔⠽⠚⠀⠐⠃⠂⠇⡒⡈⢄⢀⠠⣑⠥⠤⠜⢲⠀⠀⠀
-⠀⠀⠀⠀⠀⠐⠀⠀⠈⠈⠚⠭⣹⣽⣟⢻⡄⠀⠨⢚⠠⢱⣸⡗⠏⠑⢉⠀⠀⠀
-⠀⠀⠀⠀⢀⠆⠀⠀⠀⠀⠀⠓⠠⠌⢍⣟⣀⣀⡐⠒⠶⣞⡛⡛⢓⢰⠀⠀⠀⠀
-⠀⠀⠀⠀⡌⠀⠀⠀⣐⣂⠀⠀⠀⠀⠀⢀⡠⠄⠁⠀⠀⠈⠂⠄⠁⠁⢠⡀⠀⠀
-⠀⠀⠀⢠⠀⠀⠀⠈⢿⣷⣦⣦⣄⣀⢉⡁⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣽⠃⠀⠀
-⠀⠀⡀⠀⠠⠀⡒⠀⠀⠙⠻⢿⣿⣿⣿⣿⣿⣿⣶⣶⣶⣶⣶⣶⣶⣿⡇⠀⠀⠀
-⠀⢀⡀⠀⠀⠀⣃⡠⢥⠀⠀⠀⠈⠉⢁⠿⠿⠿⠿⠿⠿⠿⠿⠿⠟⢻⠁⠀⠀⠀
-⢀⣿⣿⣷⣦⡰⠁⠴⠮⠒⣈⠩⣂⡤⠊⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣤⣄⠀⠀⠀
-⣸⣿⣿⣿⣿⠇⠀⠀⠰⠞⠗⢋⢠⣋⣴⣦⣤⣦⣤⣤⣤⣤⣴⣴⡁⣿⣿⣷⣄⠀
-⣿⣿⣿⣿⡟⠀⠀⠀⠀⠐⠊⣠⣔⢿⣿⢿⠟⠛⠻⠿⠿⢿⣿⣿⣿⣿⣿⣿⣿⣦
-⣿⣿⣿⣿⣧⠀⢄⠀⠀⢈⣿⣿⣿⣷⣶⣿⣄⠀⠀⣠⣷⣾⣿⣿⣿⣿⣿⣿⣿⣿
-⣿⣿⣿⣿⣿⣿⣶⣤⣾⣿⣿⣿⣿⣿⣿⣿⣦⠀⠀⢠⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿`;
-
-const ART_TEMPLATES = [CAT_ART, BRAILLE_ART_1, BRAILLE_ART_2, BRAILLE_ART_3];
+const ART_TEMPLATES = [CAT_ART, BRAILLE_ART_1];
 
 // 가짜 타이머 컴포넌트
 
@@ -95,12 +87,8 @@ export default function CloudCaptionsEffect({ elapsedTime, isRunning, roundId })
     const speed = 1.2 + Math.random() * 5.3; // 1.2초 ~ 6.5초 사이의 폭넓고 무작위적인 이동 속도
     const colorIndex = Math.floor(Math.random() * 7) + 1; // 1 ~ 7번 컬러 테마
     
-    // 자막 종류 결정 (80% 일반 텍스트, 20% 아스키/점묘화 아트)
-    const rand = Math.random();
-    let type = "text";
-    if (rand < 0.20) {
-      type = "art";
-    }
+    // 그림은 8%만 등장하며, 텍스트 중 60%는 연성대 축제 문구로 표시합니다.
+    const type = Math.random() < ART_CAPTION_PROBABILITY ? "art" : "text";
 
     let content = "";
     let isArt = false;
@@ -112,7 +100,10 @@ export default function CloudCaptionsEffect({ elapsedTime, isRunning, roundId })
       content = ART_TEMPLATES[Math.floor(Math.random() * ART_TEMPLATES.length)];
       isArt = true;
     } else {
-      content = TEXT_TEMPLATES[Math.floor(Math.random() * TEXT_TEMPLATES.length)];
+      const textTemplates = Math.random() < SCHOOL_CAPTION_PROBABILITY
+        ? SCHOOL_TEXT_TEMPLATES
+        : OTHER_TEXT_TEMPLATES;
+      content = textTemplates[Math.floor(Math.random() * textTemplates.length)];
     }
 
     const newCaption = {
