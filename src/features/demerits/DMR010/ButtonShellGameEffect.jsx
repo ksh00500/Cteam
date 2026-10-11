@@ -89,10 +89,10 @@ export default function ButtonShellGameEffect({ children, isRunning, elapsedTime
                 style={{ "--slot": slot }}
                 onClick={() => handlePick(cupId)}
                 disabled={!canPick || isOpened}
-                aria-label={SLOT_NAMES[slot] + " 컵" + (isOpened ? ", 빈 컵" : "")}
+                aria-label={SLOT_NAMES[slot] + " 컵" + (isTargetPreview ? ", 정지 버튼 있음" : isOpened ? ", 빈 컵" : "")}
               >
                 <span className="dmr-010-token" aria-hidden="true">
-                  {isTargetPreview ? "STOP" : isOpened ? "EMPTY" : ""}
+                  {isTargetPreview ? "STOP" : ""}
                 </span>
                 <span className="dmr-010-shell-art" aria-hidden="true">
                   <span className="dmr-010-shell-shine" />

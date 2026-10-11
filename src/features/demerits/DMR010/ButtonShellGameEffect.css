@@ -124,17 +124,24 @@
 .dmr-010-token {
   position: absolute;
   z-index: 1;
-  bottom: 0;
+  bottom: 1px;
   left: 50%;
   transform: translateX(-50%);
+  width: calc(100% - 4px);
+  min-height: 31px;
+  display: grid;
+  place-items: center;
+  padding: 4px 3px;
   color: #fff;
-  background: #111;
-  border: 2px solid #fff;
-  border-radius: 4px;
-  padding: 2px 5px;
-  font-family: var(--font-family-timer);
-  font-size: clamp(.55rem, 2vw, .7rem);
+  background: #ff3b30;
+  border: 3px solid #111;
+  border-radius: 7px;
+  box-shadow: 2px 2px 0 #111;
+  font-family: var(--font-family-main);
+  font-size: clamp(.95rem, 3vw, 1.15rem);
   font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.03em;
 }
 .dmr-010-token:empty { display: none; }
 .dmr-010-shell.is-preview-target .dmr-010-shell-art {
@@ -149,7 +156,6 @@
   transform: translateY(-27px) rotate(18deg);
   opacity: .35;
 }
-.dmr-010-shell.is-opened .dmr-010-token { background: #555; }
 
 .dmr-010-slot-indicators {
   display: grid;
