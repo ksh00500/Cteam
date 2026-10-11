@@ -186,6 +186,9 @@
 }
 
 .game-interaction-layer {
+  /* 모든 디메리트가 동일한 타이머/버튼 공간을 사용합니다. */
+  --game-timer-zone-height: clamp(142px, 22vh, 190px);
+  --game-control-zone-height: 148px;
   width: min(100%, 675px);
   position: relative;
   z-index: 20;
@@ -198,7 +201,7 @@
 
 .game-timer-zone {
   width: 100%;
-  min-height: 0;
+  min-height: var(--game-timer-zone-height);
   position: relative;
   display: grid;
   place-items: center;
@@ -240,7 +243,7 @@
 
 .game-controls {
   width: min(100%, 510px);
-  min-height: 0;
+  min-height: var(--game-control-zone-height);
   position: relative;
   z-index: 100;
   display: grid;
@@ -327,7 +330,6 @@
   }
 
   .game-controls {
-    min-height: 0;
     margin-top: 0;
   }
 }

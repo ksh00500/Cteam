@@ -43,8 +43,14 @@ export default function DemeritEngine({
   };
 
   // 1. TimerEffect 순차 적용
+  // DMR-006(화면 전체 이동)을 바깥 래퍼로 유지해야 회전 등 transform 효과가
+  // position: fixed의 기준 좌표를 바꾸지 않습니다.
+  const timerModules = [
+    ...activeModules.filter((module) => module.id !== "DMR-006"),
+    ...activeModules.filter((module) => module.id === "DMR-006")
+  ];
   let timerContent = renderTimer ? renderTimer() : null;
-  activeModules.forEach((module) => {
+  timerModules.forEach((module) => {
     const EffectComponent = module.TimerEffect;
     if (EffectComponent) {
       timerContent = (

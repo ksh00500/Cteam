@@ -1,22 +1,30 @@
-.dmr-001-timer-hidden {
-  visibility: hidden;
-  opacity: 0;
-  transition: opacity 0.2s ease;
+.dmr-001-wrapper,
+.dmr-001-content {
+  position: relative;
+  width: 100%;
+}
+
+.dmr-001-hidden-overlay {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
 }
 
 .dmr-001-hidden-badge {
-  display: inline-block;
-  background-color: #000000;
-  color: #FFFFFF;
-  font-family: 'Courier New', Courier, monospace;
-  font-size: 1.25rem;
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+  max-width: calc(100% - 1rem);
   padding: 0.6rem 1.2rem;
-  border-radius: var(--radius-md);
+  color: #ffffff;
+  background-color: #000000;
+  font-family: var(--font-family-timer);
+  font-size: clamp(0.9rem, 2.5vw, 1.25rem);
+  font-weight: 900;
+  text-align: center;
+  letter-spacing: 0.05em;
   border: 3px solid #000000;
-  box-shadow: 4px 4px 0px #FF3B30;
+  border-radius: var(--radius-md);
+  box-shadow: 4px 4px 0 #ff3b30;
   animation: dmr-001-pulse 1.5s infinite ease-in-out;
 }
 
@@ -24,4 +32,3 @@
   0%, 100% { transform: scale(1); }
   50% { transform: scale(1.04); }
 }
-

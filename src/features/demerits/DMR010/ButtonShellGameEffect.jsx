@@ -125,8 +125,18 @@ export default function ButtonShellGameEffect({ children, isRunning, elapsedTime
             const isRemoved = removedCups.includes(cupIdx);
             const currentSlot = cupSlots[cupIdx];
 
-            // 원래 슬롯 위치에서 현재 이동한 슬롯 위치까지의 X축 거리 계산 (간격 118px)
-            const xOffset = (currentSlot - cupIdx) * 118;
+            // 컵/간격 크기가 반응형으로 변해도 이동 거리가 슬롯에 맞도록 계산합니다.
+            const slotDiff = currentSlot - cupIdx;
+            const step = "var(--dmr-010-step)";
+            const xOffset = slotDiff === 2
+              ? `calc(${step} + ${step})`
+              : slotDiff === 1
+                ? step
+                : slotDiff === -1
+                  ? `calc(0px - ${step})`
+                  : slotDiff === -2
+                    ? `calc(0px - ${step} - ${step})`
+                    : "0px";
             
             // 섞이는 도중에는 부드러운 입체감을 위해 살짝 Y축 이동 효과 부여
             const yOffset = isShuffling && currentSlot % 2 === 1 ? -18 : 0;
@@ -141,7 +151,7 @@ export default function ButtonShellGameEffect({ children, isRunning, elapsedTime
                   // 무작위 슬롯 위치에 맞게 실시간 위치 이동
                   transform: isCovering
                     ? undefined
-                    : `translate(${xOffset}px, ${yOffset}px)`,
+                    : `translate(${xOffset}, ${yOffset}px)`,
                 }}
                 onClick={(e) => handleCupClick(cupIdx, e)}
               >

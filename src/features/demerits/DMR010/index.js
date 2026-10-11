@@ -8,7 +8,7 @@ const demeritModule = {
     name: "버튼 야바위",
     description: "5초까지 정지 버튼을 가린 3개의 컵이 섞이며, 5초 이후 진짜 정지 버튼이 들어 있는 컵을 찾아 눌러야 합니다.",
     difficulties: ["상"],
-    conflicts: []
+    conflicts: ["DMR-002"]
   },
   TimerEffect: null,
   // 정지 버튼 영역에 야바위 이펙트 적용
