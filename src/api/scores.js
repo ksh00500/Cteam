@@ -45,39 +45,6 @@ export async function submitScore(scoreData) {
 }
 
 /**
- * TOP 5 상품 대상자의 선택형 연락처 등록 API
- */
-export async function submitPrizeContact(scoreId, phone, contactToken) {
-  try {
-    const response = await fetch(`${API_BASE_URL}/scores/${encodeURIComponent(scoreId)}/contact`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ phone, contactToken })
-    });
-
-    const data = await readJsonResponse(response);
-    if (!response.ok || data.success === false) {
-      return {
-        success: false,
-        error: data.error || `연락처를 등록하지 못했습니다. (${response.status})`,
-        rank: data.rank
-      };
-    }
-
-    return { success: true, data: data.data || data };
-  } catch (error) {
-    return {
-      success: false,
-      error: error instanceof Error
-        ? error.message
-        : "연락처 등록 중 네트워크 오류가 발생했습니다."
-    };
-  }
-}
-
-/**
  * 랭킹 조회 API
  * @param {number} limit 조회 개수 (기본 10개)
  */

@@ -24,9 +24,6 @@ interface ScoreItem {
   finalError: number;
   selectedDemerits: string[];
   createdAt: string;
-  contactToken?: string;
-  phone?: string;
-  phoneRegisteredAt?: string;
 }
 
 interface ScoreInput {
@@ -35,11 +32,6 @@ interface ScoreInput {
   stage?: unknown;
   finalError?: unknown;
   selectedDemerits?: unknown;
-}
-
-interface PrizeContactInput {
-  phone?: unknown;
-  contactToken?: unknown;
 }
 
 let dbScores: ScoreItem[] = [];
@@ -72,27 +64,17 @@ function calculateRanks(scoresList: ScoreItem[]): ScoreItem[] {
   });
 }
 
-function toPublicScore(item: ScoreItem) {
-  const {
-    phone: _phone,
-    phoneRegisteredAt: _phoneRegisteredAt,
-    contactToken: _contactToken,
-    ...publicItem
-  } = item;
-  return publicItem;
-}
-
-function toSubmittedScore(item: ScoreItem) {
+function toPublicScore(item: ScoreItem): ScoreItem {
   return {
-    ...toPublicScore(item),
-    contactToken: item.contactToken
+    id: item.id,
+    nickname: item.nickname,
+    score: item.score,
+    stage: item.stage,
+    finalError: item.finalError,
+    selectedDemerits: item.selectedDemerits,
+    createdAt: item.createdAt,
+    ...(item.rank === undefined ? {} : { rank: item.rank })
   };
-}
-
-function normalizePhone(value: unknown): string | null {
-  if (typeof value !== "string") return null;
-  const digits = value.replace(/\D/g, "");
-  return /^01[016789]\d{7,8}$/.test(digits) ? digits : null;
 }
 
 function validateScoreInput(input: ScoreInput): string | null {
@@ -138,10 +120,7 @@ function isScoreItem(value: unknown): value is ScoreItem {
     Number.isFinite(item.stage) &&
     Number.isFinite(item.finalError) &&
     Array.isArray(item.selectedDemerits) &&
-    typeof item.createdAt === "string" &&
-    (item.contactToken === undefined || typeof item.contactToken === "string") &&
-    (item.phone === undefined || typeof item.phone === "string") &&
-    (item.phoneRegisteredAt === undefined || typeof item.phoneRegisteredAt === "string")
+    typeof item.createdAt === "string"
   );
 }
 
@@ -152,7 +131,14 @@ async function loadScores(): Promise<ScoreItem[]> {
     if (!Array.isArray(parsed) || !parsed.every(isScoreItem)) {
       throw new Error("점수 파일 형식이 올바르지 않습니다.");
     }
-    return calculateRanks(parsed);
+    const normalizedScores = calculateRanks(parsed.map(toPublicScore));
+    // 이전 버전에 저장된 연락처 및 토큰은 제거하고 기존 랭킹 기록을 보존합니다.
+    if (parsed.some((item) =>
+      "phone" in item || "phoneRegisteredAt" in item || "contactToken" in item
+    )) {
+      await persistScores(normalizedScores);
+    }
+    return normalizedScores;
   } catch (error) {
     const nodeError = error as NodeJS.ErrnoException;
     if (nodeError.code !== "ENOENT") throw error;
@@ -206,101 +192,16 @@ app.post("/api/scores", async (req, res) => {
     selectedDemerits: Array.isArray(input.selectedDemerits)
       ? [...new Set(input.selectedDemerits as string[])]
       : [],
-    createdAt: new Date().toISOString(),
-    contactToken: randomUUID()
+    createdAt: new Date().toISOString()
   };
 
   try {
     const saved = await addScore(newRecord);
     res.set("Cache-Control", "no-store");
-    res.status(201).json({ success: true, data: toSubmittedScore(saved) });
+    res.status(201).json({ success: true, data: toPublicScore(saved) });
   } catch (error) {
     console.error("[SetStop Server] Failed to save score:", error);
     res.status(500).json({ success: false, error: "점수를 저장하지 못했습니다." });
-  }
-});
-
-app.post("/api/scores/:id/contact", async (req, res) => {
-  const scoreId = String(req.params.id || "").trim();
-  const input = req.body as PrizeContactInput;
-  const normalizedPhone = normalizePhone(input.phone);
-  const contactToken = typeof input.contactToken === "string" ? input.contactToken : "";
-
-  if (!scoreId) {
-    res.status(400).json({ success: false, error: "점수 기록을 찾을 수 없습니다." });
-    return;
-  }
-  if (!normalizedPhone) {
-    res.status(400).json({ success: false, error: "올바른 휴대전화 번호를 입력해 주세요." });
-    return;
-  }
-
-  let outcome:
-    | { status: 200; data: { id: string; rank: number; phoneRegistered: true } }
-    | { status: 404 | 409; error: string; rank?: number }
-    | null = null;
-
-  const operation = mutationQueue.then(async () => {
-    const rankedScores = calculateRanks(dbScores);
-    const current = rankedScores.find((item) => item.id === scoreId);
-
-    if (!current) {
-      outcome = { status: 404, error: "점수 기록을 찾을 수 없습니다." };
-      return;
-    }
-
-    if (!current.contactToken || current.contactToken !== contactToken) {
-      outcome = { status: 404, error: "연락처 등록 권한을 확인할 수 없습니다." };
-      return;
-    }
-
-    const currentRank = current.rank || rankedScores.indexOf(current) + 1;
-    if (currentRank > 5) {
-      outcome = {
-        status: 409,
-        rank: currentRank,
-        error: `현재 ${currentRank}위로 5위 밖이어서 상품 연락처를 등록할 수 없습니다.`
-      };
-      return;
-    }
-
-    const registeredAt = new Date().toISOString();
-    const nextScores = rankedScores.map((item) => (
-      item.id === scoreId
-        ? { ...item, phone: normalizedPhone, phoneRegisteredAt: registeredAt }
-        : item
-    ));
-
-    await persistScores(nextScores);
-    dbScores = nextScores;
-    outcome = {
-      status: 200,
-      data: { id: scoreId, rank: currentRank, phoneRegistered: true }
-    };
-  });
-
-  mutationQueue = operation.catch(() => undefined);
-
-  try {
-    await operation;
-    if (!outcome) {
-      throw new Error("연락처 등록 결과를 확인하지 못했습니다.");
-    }
-    if (outcome.status !== 200) {
-      res.status(outcome.status).json({
-        success: false,
-        error: outcome.error,
-        rank: outcome.rank,
-        eligible: false
-      });
-      return;
-    }
-
-    res.set("Cache-Control", "no-store");
-    res.json({ success: true, data: outcome.data });
-  } catch (error) {
-    console.error("[SetStop Server] Failed to save prize contact:", error);
-    res.status(500).json({ success: false, error: "연락처를 저장하지 못했습니다." });
   }
 });
 

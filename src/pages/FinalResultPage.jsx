@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from "react";
-import { createPortal } from "react-dom";
 import PageContainer from "../components/common/PageContainer.jsx";
 import AppButton from "../components/common/AppButton.jsx";
 import ActiveDemeritList from "../features/demerits/components/ActiveDemeritList.jsx";
@@ -9,18 +8,9 @@ import {
   getStageClearLimit,
   isStageCleared
 } from "../features/game/utils/calculateScore.js";
-import { submitPrizeContact, submitScore } from "../api/scores.js";
+import { submitScore } from "../api/scores.js";
 import LoadingMessage from "../components/common/LoadingMessage.jsx";
 import ErrorMessage from "../components/common/ErrorMessage.jsx";
-import "./FinalResultPage.css";
-
-function formatPhoneInput(value) {
-  const digits = value.replace(/\D/g, "").slice(0, 11);
-  if (digits.length <= 3) return digits;
-  if (digits.length <= 7) return `${digits.slice(0, 3)}-${digits.slice(3)}`;
-  const middleLength = digits.length === 10 ? 3 : 4;
-  return `${digits.slice(0, 3)}-${digits.slice(3, 3 + middleLength)}-${digits.slice(3 + middleLength)}`;
-}
 
 export default function FinalResultPage({
   nickname,
@@ -35,12 +25,6 @@ export default function FinalResultPage({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState("");
   const [submittedMessage, setSubmittedMessage] = useState("");
-  const [submittedScore, setSubmittedScore] = useState(null);
-  const [isPrizeModalOpen, setIsPrizeModalOpen] = useState(false);
-  const [phone, setPhone] = useState("");
-  const [contactError, setContactError] = useState("");
-  const [contactSuccess, setContactSuccess] = useState("");
-  const [isContactSubmitting, setIsContactSubmitting] = useState(false);
   const submitStartedRef = useRef(false);
 
   const { finalError, score } = calculateFinalScore(results);
@@ -63,12 +47,8 @@ export default function FinalResultPage({
 
     if (res.success) {
       const savedScore = res.data;
-      setSubmittedScore(savedScore);
       setIsScoreSubmitted(true);
       setSubmittedMessage(`🎉 점수가 자동 등록되었습니다. 현재 ${savedScore.rank}위입니다!`);
-      if (Number(savedScore.rank) <= 5) {
-        setIsPrizeModalOpen(true);
-      }
     } else {
       submitStartedRef.current = false;
       setSubmitError(res.error || "점수 자동 등록에 실패했습니다. 다시 시도해 주세요.");
@@ -78,88 +58,6 @@ export default function FinalResultPage({
   useEffect(() => {
     handleSubmitScore();
   }, []);
-
-  const handlePrizeContactSubmit = async (event) => {
-    event.preventDefault();
-    if (!submittedScore?.id || isContactSubmitting) return;
-
-    setIsContactSubmitting(true);
-    setContactError("");
-    const res = await submitPrizeContact(
-      submittedScore.id,
-      phone,
-      submittedScore.contactToken
-    );
-    setIsContactSubmitting(false);
-
-    if (res.success) {
-      const confirmedRank = res.data.rank;
-      setSubmittedScore((prev) => ({ ...prev, rank: confirmedRank }));
-      setContactSuccess(`현재 ${confirmedRank}위로 연락처가 등록되었습니다.`);
-    } else {
-      if (Number.isFinite(Number(res.rank))) {
-        setSubmittedScore((prev) => ({ ...prev, rank: Number(res.rank) }));
-      }
-      setContactError(res.error || "연락처 등록에 실패했습니다.");
-    }
-  };
-
-  const prizeModal = isPrizeModalOpen && submittedScore && typeof document !== "undefined"
-    ? createPortal(
-        <div className="prize-modal-backdrop" role="presentation">
-          <section className="prize-modal" role="dialog" aria-modal="true" aria-labelledby="prize-modal-title">
-            <div className="prize-rank-badge">현재 {submittedScore.rank}위</div>
-            <h2 id="prize-modal-title">🎁 TOP 5 상품 대상</h2>
-
-            {contactSuccess ? (
-              <>
-                <p className="prize-success-message">{contactSuccess}</p>
-                <p className="prize-warning-copy">
-                  행사 종료 시점에 5위 밖으로 밀리면 최종 상품 대상에서 제외될 수 있습니다.
-                </p>
-                <AppButton variant="primary" onClick={() => setIsPrizeModalOpen(false)}>
-                  확인
-                </AppButton>
-              </>
-            ) : (
-              <form onSubmit={handlePrizeContactSubmit}>
-                <p className="prize-modal-copy">
-                  상품 수령 안내를 받을 전화번호를 등록할 수 있습니다. 전화번호 등록은 선택 사항입니다.
-                </p>
-                <div className="prize-warning-copy">
-                  ⚠️ 현재는 TOP 5지만 행사 종료 전에 6위 이하로 밀리면 상품을 받을 수 없습니다.
-                </div>
-                <label htmlFor="prize-phone">전화번호</label>
-                <input
-                  id="prize-phone"
-                  type="tel"
-                  inputMode="tel"
-                  autoComplete="tel"
-                  placeholder="010-1234-5678"
-                  value={phone}
-                  onChange={(event) => {
-                    setPhone(formatPhoneInput(event.target.value));
-                    if (contactError) setContactError("");
-                  }}
-                  className="setstop-input"
-                />
-                {contactError && <p className="prize-contact-error">⚠️ {contactError}</p>}
-
-                <div className="prize-modal-actions">
-                  <AppButton type="submit" variant="success" disabled={isContactSubmitting}>
-                    {isContactSubmitting ? "확인 중..." : "전화번호 등록"}
-                  </AppButton>
-                  <AppButton type="button" variant="secondary" onClick={() => setIsPrizeModalOpen(false)}>
-                    등록 안 하기
-                  </AppButton>
-                </div>
-              </form>
-            )}
-          </section>
-        </div>,
-        document.body
-      )
-    : null;
 
   return (
     <>
@@ -245,7 +143,6 @@ export default function FinalResultPage({
           <AppButton variant="secondary" onClick={onRestart} style={{ width: "100%" }}>🔄 처음부터 다시 도전하기</AppButton>
         </div>
       </PageContainer>
-      {prizeModal}
     </>
   );
 }
